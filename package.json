@@ -1,0 +1,13 @@
+{
+  "name": "react-vite-node-mysql-monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "install-all": "npm install --workspaces",
+    "dev:backend": "npm --workspace backend run dev",
+    "dev:frontend": "npm --workspace frontend run dev"
+  }
+}
