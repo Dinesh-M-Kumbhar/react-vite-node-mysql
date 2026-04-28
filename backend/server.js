@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
+const postsRoutes = require('./routes/posts');
+const commentsRoutes = require('./routes/comments');
 const config = require('./config/config');
 const seed = require('./seed');
 
@@ -10,9 +12,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/comments', commentsRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Auth backend is running.' });
+  res.json({ message: 'Blog backend is running.' });
 });
 
 const start = async () => {

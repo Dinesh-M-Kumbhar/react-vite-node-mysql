@@ -7,6 +7,41 @@ const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
+router.post('/register', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
+  }
+
+  const existingUser = await User.findOne({ where: { email } });
+  if (existingUser) {
+    return res.status(409).json({ message: 'A user with that email already exists.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const createdUser = await User.create({
+    email,
+    password: hashedPassword,
+    isAdmin: false
+  });
+
+  const token = jwt.sign(
+    { id: createdUser.id, email: createdUser.email, isAdmin: createdUser.isAdmin },
+    config.jwtSecret,
+    { expiresIn: config.jwtExpiresIn }
+  );
+
+  return res.status(201).json({
+    token,
+    user: {
+      id: createdUser.id,
+      email: createdUser.email,
+      isAdmin: createdUser.isAdmin
+    }
+  });
+});
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { jsonFetch } from '../api.js';
 
-export default function LoginPage({ onLogin }) {
-  const [email, setEmail] = useState('demo@demo.com');
+export default function RegisterPage({ onRegister }) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,11 +15,11 @@ export default function LoginPage({ onLogin }) {
     setLoading(true);
 
     try {
-      const data = await jsonFetch('/auth/login', {
+      const data = await jsonFetch('/auth/register', {
         method: 'POST',
         body: { email, password }
       });
-      onLogin(data.token);
+      onRegister(data.token);
       navigate('/');
     } catch (err) {
       setMessage(err.message);
@@ -29,15 +29,13 @@ export default function LoginPage({ onLogin }) {
   };
 
   return (
-    <div className="card shadow-sm mx-auto" style={{ maxWidth: 520 }}>
+    <div className="card shadow-sm" style={{ maxWidth: 520 }}>
       <div className="card-body">
-        <h1 className="card-title mb-3">Log in</h1>
-        <p className="text-muted mb-4">Log in to create posts, comment, and manage your dashboard.</p>
+        <h1 className="card-title mb-3">Register</h1>
         <form onSubmit={handleSubmit} className="d-grid gap-3">
           <div>
-            <label htmlFor="loginEmail" className="form-label">Email</label>
+            <label className="form-label">Email</label>
             <input
-              id="loginEmail"
               type="email"
               className="form-control"
               value={email}
@@ -46,9 +44,8 @@ export default function LoginPage({ onLogin }) {
             />
           </div>
           <div>
-            <label htmlFor="loginPassword" className="form-label">Password</label>
+            <label className="form-label">Password</label>
             <input
-              id="loginPassword"
               type="password"
               className="form-control"
               value={password}
@@ -58,13 +55,9 @@ export default function LoginPage({ onLogin }) {
           </div>
           {message && <div className="alert alert-danger">{message}</div>}
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Logging in…' : 'Log in'}
+            {loading ? 'Registering…' : 'Create account'}
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <span className="text-muted">Need an account?</span>{' '}
-          <Link to="/register">Register here</Link>
-        </div>
       </div>
     </div>
   );

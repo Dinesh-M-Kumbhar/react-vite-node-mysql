@@ -14,8 +14,32 @@ const sequelize = new Sequelize(
 );
 
 const User = require('./user')(sequelize);
+const Post = require('./post')(sequelize);
+const Comment = require('./comment')(sequelize);
+const Media = require('./media')(sequelize);
+const Tag = require('./tag')(sequelize);
+const PostTag = require('./postTag')(sequelize);
+
+User.hasMany(Post, { foreignKey: 'authorId', as: 'posts' });
+Post.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+
+Post.hasMany(Comment, { foreignKey: 'postId', as: 'comments', onDelete: 'CASCADE' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
+Comment.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+User.hasMany(Comment, { foreignKey: 'authorId', as: 'comments' });
+
+Post.hasMany(Media, { foreignKey: 'postId', as: 'media', onDelete: 'CASCADE' });
+Media.belongsTo(Post, { foreignKey: 'postId' });
+
+Post.belongsToMany(Tag, { through: PostTag, foreignKey: 'postId', otherKey: 'tagId', as: 'tags' });
+Tag.belongsToMany(Post, { through: PostTag, foreignKey: 'tagId', otherKey: 'postId', as: 'posts' });
 
 module.exports = {
   sequelize,
-  User
+  User,
+  Post,
+  Comment,
+  Media,
+  Tag,
+  PostTag
 };
