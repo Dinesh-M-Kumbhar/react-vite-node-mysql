@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage.jsx';
 import AdminPage from './pages/AdminPage.jsx';
-import UserPage from './pages/UserPage.jsx';
-import './App.css';
+import NavBar from './components/NavBar.jsx';
 
-const API_BASE = 'http://localhost:4000/api/auth';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api/auth';
 
 function App() {
   const [email, setEmail] = useState('demo@demo.com');
@@ -98,28 +97,10 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="app-layout">
-        <header className="app-header">
-          <div className="app-brand">JWT Dashboard</div>
-          <nav className="nav-links">
-            <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>
-              Home
-            </NavLink>
-            <NavLink to="/user" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-              User
-            </NavLink>
-            <NavLink to="/admin" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-              Admin
-            </NavLink>
-          </nav>
-          {isLoggedIn && (
-            <button className="logout-small" onClick={handleLogout}>
-              Logout
-            </button>
-          )}
-        </header>
+      <div className="min-vh-100 bg-light">
+        <NavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
-        <main className="app-content">
+        <main className="container py-5 d-flex justify-content-center">
           <Routes>
             <Route
               path="/"
@@ -139,16 +120,6 @@ function App() {
               }
             />
             <Route
-              path="/user"
-              element={
-                isLoggedIn ? (
-                  <UserPage email={email} />
-                ) : (
-                  <Navigate to="/" replace />
-                )
-              }
-            />
-            <Route
               path="/admin"
               element={
                 isLoggedIn ? (
@@ -162,9 +133,11 @@ function App() {
                       onCreateUser={handleCreateUser}
                     />
                   ) : (
-                    <div className="page-card">
-                      <h1>Admin Access Required</h1>
-                      <p className="subtitle">You must be logged in as admin to view this page.</p>
+                    <div className="card shadow-sm w-100" style={{ maxWidth: 620 }}>
+                      <div className="card-body">
+                        <h1 className="card-title">Admin Access Required</h1>
+                        <p className="text-muted mb-0">You must be logged in as admin to view this page.</p>
+                      </div>
                     </div>
                   )
                 ) : (

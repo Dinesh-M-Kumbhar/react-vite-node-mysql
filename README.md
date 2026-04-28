@@ -12,11 +12,16 @@ This repository contains a simple full-stack demo app:
    - `cd frontend && npm install`
 
 2. Configure MySQL in `backend/.env` or use the defaults from `backend/.env.example`.
+   - use `backend/.env.production.example` for production values
 
-3. Start the backend server:
+3. Configure frontend API base in `frontend/.env` or use `frontend/.env.example`.
+   - use `frontend/.env.production` for production values
+   - `VITE_API_BASE=http://localhost:4000/api/auth`
+
+4. Start the backend server:
    - `cd backend && npm run dev`
 
-4. Start the frontend app:
+5. Start the frontend app:
    - `cd frontend && npm run dev`
 
 ## Demo credentials
