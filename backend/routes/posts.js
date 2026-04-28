@@ -111,7 +111,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
 router.put('/:id', authMiddleware, async (req, res) => {
   const { title, content, type, status, publishedAt, media, tags } = req.body;
-  const post = await Post.findByPk(req.params.id, { include: [Tag, Media] });
+  const post = await Post.findByPk(req.params.id, { include: [{ model: Tag, as: 'tags' }, { model: Media, as: 'media' }] });
 
   if (!post) {
     return res.status(404).json({ message: 'Post not found.' });
