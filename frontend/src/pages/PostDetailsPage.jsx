@@ -106,7 +106,7 @@ export default function PostDetailsPage({ isLoggedIn, user }) {
         <div>
           <h1 className="mb-1">{post.title}</h1>
           <div className="text-muted">
-            {post.type} post • {formatDate(post.publishedAt)} • by <strong>{post.author?.name || post.author?.email}</strong>
+            {post.type} post • {formatDate(post.publishedAt)} • by <strong>{post.author?.name?.trim() || post.author?.email}</strong>
           </div>
         </div>
         <div className="d-flex gap-2">
