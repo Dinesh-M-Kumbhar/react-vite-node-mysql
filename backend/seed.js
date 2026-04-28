@@ -2,11 +2,13 @@ const bcrypt = require('bcryptjs');
 const { User, Post, Media, Comment, Tag } = require('./models');
 
 const DEFAULT_ADMIN = {
+  name: 'Admin User',
   email: 'admin@admin.com',
   password: 'Admin123!'
 };
 
 const DEFAULT_USER = {
+  name: 'Demo User',
   email: 'demo@demo.com',
   password: 'Password123!'
 };
@@ -16,6 +18,7 @@ module.exports = async function seed() {
   if (!admin) {
     const hashedPassword = await bcrypt.hash(DEFAULT_ADMIN.password, 10);
     admin = await User.create({
+      name: DEFAULT_ADMIN.name,
       email: DEFAULT_ADMIN.email,
       password: hashedPassword,
       isAdmin: true
@@ -28,7 +31,7 @@ module.exports = async function seed() {
   let user = await User.findOne({ where: { email: DEFAULT_USER.email } });
   if (!user) {
     const hashedPassword = await bcrypt.hash(DEFAULT_USER.password, 10);
-    user = await User.create({ email: DEFAULT_USER.email, password: hashedPassword });
+    user = await User.create({ name: DEFAULT_USER.name, email: DEFAULT_USER.email, password: hashedPassword });
     console.log('Created default user:', DEFAULT_USER.email);
   } else {
     console.log('Default user already exists.');

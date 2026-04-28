@@ -106,7 +106,7 @@ export default function PostDetailsPage({ isLoggedIn, user }) {
         <div>
           <h1 className="mb-1">{post.title}</h1>
           <div className="text-muted">
-            {post.type} post • {formatDate(post.publishedAt)} • by <strong>{post.author?.email}</strong>
+            {post.type} post • {formatDate(post.publishedAt)} • by <strong>{post.author?.name || post.author?.email}</strong>
           </div>
         </div>
         <div className="d-flex gap-2">
@@ -147,7 +147,7 @@ export default function PostDetailsPage({ isLoggedIn, user }) {
             <div className="card mb-3" key={comment.id}>
               <div className="card-body">
                 <p className="mb-1">{comment.content}</p>
-                <small className="text-muted">By {comment.author?.email || 'anonymous'}</small>
+                <small className="text-muted">By {comment.author?.name || comment.author?.email || 'anonymous'}</small>
               </div>
             </div>
           ))

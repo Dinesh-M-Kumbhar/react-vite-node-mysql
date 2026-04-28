@@ -70,7 +70,7 @@ export default function NavBar({ isLoggedIn, onLogout, user }) {
 
         {isLoggedIn && (
           <div className="d-flex align-items-center gap-2">
-            <span className="text-muted small">{user?.email}</span>
+            <span className="text-muted small">{user?.name || user?.email}</span>
             <button type="button" className="btn btn-sm btn-danger" onClick={onLogout}>
               Logout
             </button>

@@ -12,7 +12,7 @@ router.get('/post/:postId', async (req, res) => {
 
   const comments = await Comment.findAll({
     where: { postId: req.params.postId },
-    include: [{ model: User, as: 'author', attributes: ['id', 'email'] }],
+    include: [{ model: User, as: 'author', attributes: ['id', 'name', 'email'] }],
     order: [['created_at', 'ASC']]
   });
 
@@ -38,7 +38,7 @@ router.post('/', authMiddleware, async (req, res) => {
   });
 
   const result = await Comment.findByPk(comment.id, {
-    include: [{ model: User, as: 'author', attributes: ['id', 'email'] }]
+    include: [{ model: User, as: 'author', attributes: ['id', 'name', 'email'] }]
   });
 
   return res.status(201).json({ comment: result });

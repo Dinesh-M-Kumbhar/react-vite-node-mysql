@@ -8,10 +8,10 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Name, email, and password are required.' });
   }
 
   const existingUser = await User.findOne({ where: { email } });
@@ -21,13 +21,14 @@ router.post('/register', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const createdUser = await User.create({
+    name: name.trim(),
     email,
     password: hashedPassword,
     isAdmin: false
   });
 
   const token = jwt.sign(
-    { id: createdUser.id, email: createdUser.email, isAdmin: createdUser.isAdmin },
+    { id: createdUser.id, email: createdUser.email, isAdmin: createdUser.isAdmin, name: createdUser.name },
     config.jwtSecret,
     { expiresIn: config.jwtExpiresIn }
   );
@@ -36,6 +37,7 @@ router.post('/register', async (req, res) => {
     token,
     user: {
       id: createdUser.id,
+      name: createdUser.name,
       email: createdUser.email,
       isAdmin: createdUser.isAdmin
     }
@@ -60,7 +62,7 @@ router.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, email: user.email, isAdmin: user.isAdmin },
+    { id: user.id, email: user.email, isAdmin: user.isAdmin, name: user.name },
     config.jwtSecret,
     { expiresIn: config.jwtExpiresIn }
   );
@@ -69,6 +71,7 @@ router.post('/login', async (req, res) => {
     token,
     user: {
       id: user.id,
+      name: user.name,
       email: user.email,
       isAdmin: user.isAdmin
     }
@@ -80,10 +83,10 @@ router.post('/users', authMiddleware, async (req, res) => {
     return res.status(403).json({ message: 'Admin access required.' });
   }
 
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Name, email, and password are required.' });
   }
 
   const existingUser = await User.findOne({ where: { email } });
@@ -93,6 +96,7 @@ router.post('/users', authMiddleware, async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const createdUser = await User.create({
+    name: name.trim(),
     email,
     password: hashedPassword,
     isAdmin: false
@@ -101,6 +105,7 @@ router.post('/users', authMiddleware, async (req, res) => {
   return res.status(201).json({
     user: {
       id: createdUser.id,
+      name: createdUser.name,
       email: createdUser.email,
       isAdmin: createdUser.isAdmin
     }
@@ -109,7 +114,7 @@ router.post('/users', authMiddleware, async (req, res) => {
 
 router.get('/profile', authMiddleware, async (req, res) => {
   const user = await User.findByPk(req.user.id, {
-    attributes: ['id', 'email', 'isAdmin']
+    attributes: ['id', 'name', 'email', 'isAdmin']
   });
   if (!user) {
     return res.status(404).json({ message: 'User not found.' });

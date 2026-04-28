@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { jsonFetch } from '../api.js';
 
 export default function RegisterPage({ onRegister }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -17,7 +18,7 @@ export default function RegisterPage({ onRegister }) {
     try {
       const data = await jsonFetch('/auth/register', {
         method: 'POST',
-        body: { email, password }
+        body: { name, email, password }
       });
       onRegister(data.token);
       navigate('/');
@@ -33,6 +34,16 @@ export default function RegisterPage({ onRegister }) {
       <div className="card-body">
         <h1 className="card-title mb-3">Register</h1>
         <form onSubmit={handleSubmit} className="d-grid gap-3">
+          <div>
+            <label className="form-label">Full name</label>
+            <input
+              type="text"
+              className="form-control"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              required
+            />
+          </div>
           <div>
             <label className="form-label">Email</label>
             <input

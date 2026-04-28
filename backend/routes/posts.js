@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 const includePostDetails = [
-  { model: User, as: 'author', attributes: ['id', 'email'] },
+  { model: User, as: 'author', attributes: ['id', 'name', 'email'] },
   { model: Media, as: 'media' },
   {
     model: Comment,
@@ -51,12 +51,12 @@ router.get('/mine', authMiddleware, async (req, res) => {
 router.get('/:id', async (req, res) => {
   const post = await Post.findByPk(req.params.id, {
     include: [
-      { model: User, as: 'author', attributes: ['id', 'email'] },
+      { model: User, as: 'author', attributes: ['id', 'name', 'email'] },
       { model: Media, as: 'media' },
       {
         model: Comment,
         as: 'comments',
-        include: [{ model: User, as: 'author', attributes: ['id', 'email'] }]
+        include: [{ model: User, as: 'author', attributes: ['id', 'name', 'email'] }]
       },
       { model: Tag, as: 'tags', attributes: ['id', 'name'] }
     ],

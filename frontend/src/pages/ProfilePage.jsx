@@ -25,6 +25,10 @@ export default function ProfilePage({ user }) {
         <h1 className="card-title mb-3">Profile</h1>
         <p className="text-muted mb-4">Manage your account and view your activity summary.</p>
         <div className="mb-3">
+          <strong>Name</strong>
+          <div>{user?.name || 'Not available'}</div>
+        </div>
+        <div className="mb-3">
           <strong>Email</strong>
           <div>{user?.email || 'Not available'}</div>
         </div>

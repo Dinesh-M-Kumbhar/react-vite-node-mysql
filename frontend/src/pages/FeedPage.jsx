@@ -51,7 +51,7 @@ export default function FeedPage() {
                 </div>
                 <h2 className="h5 card-title">{post.title}</h2>
                 <p className="text-muted mb-3">
-                  By <strong>{post.author?.email || 'Unknown author'}</strong>
+                  By <strong>{post.author?.name || post.author?.email || 'Unknown author'}</strong>
                 </p>
                 <p className="card-text text-truncate" style={{ maxHeight: '5rem' }}>
                   {post.content || 'No content provided.'}
